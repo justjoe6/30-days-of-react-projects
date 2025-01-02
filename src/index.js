@@ -59,15 +59,16 @@ const Home = () => {
 
 const CatData = ({catData,catImg,imgHeight,imgWidth}) => {
   const totalYears = catData.reduce((acc,data)=>acc+parseInt(data["life_span"].split(" ")[0])+parseInt(data["life_span"].split(" ")[2]),0)
+  const t = parseInt(catData[0]["weight"]["imperial"].split("  ")[0])+parseInt(catData[0]["weight"]["imperial"].split("  ")[2])/2
   catData.shift()
-  const totalWeight = catData.reduce((acc,data)=>acc+parseInt(data["weight"]["imperial"].split(" ")[0])+parseInt(data["weight"]["imperial"].split(" ")[2]),0)
+  const totalWeight = catData.reduce((acc,data)=>acc+parseInt(data["weight"]["imperial"].split(" ")[0])+parseInt(data["weight"]["imperial"].split(" ")[2]),0)+t
 
   return (
     <>
     <h2>Cata Data</h2>
     <img style={{width:imgWidth,height:imgHeight}} src={catImg} alt="Cat"/>
     <p>There are {catData.length} cat breeds</p>
-    <p>Average cat weight is {(totalWeight/catData.length).toFixed(2)} lbs and the average lifespan is {(totalYears/catData.length).toFixed(2)}</p>
+    <p>Average cat weight is {(totalWeight/(2*catData.length)).toFixed(2)} lbs and the average lifespan is {(totalYears/(2*catData.length)).toFixed(2)}</p>
     </>
   )
 }
