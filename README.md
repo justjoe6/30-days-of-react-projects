@@ -1,4 +1,4 @@
-Cata Data Project
+#Cata Data Project
 
 Fetch Cats Data:
 Below is the asynchronous fetch cats data function which uses the API (https://api.thecatapi.com/v1/breeds) and retrieves data such as cat weight and lifespan which is
@@ -79,7 +79,7 @@ the image and data has been loaded otherwise we return a paragraph tag containin
     </>
 ```
 
-Countries Project
+#Countries Project
 
 Fetch Countries:
 Similar to previous fetch requests here we pull data from the API (https://restcountries.com/v3.1/all) once the data is loaded we set the countriesLoad state to true and store
@@ -219,4 +219,112 @@ Here we return the HTML for the countries page along with the map method calls c
       {countriesLoaded && <>{!topMetric && topPopulated()} {topMetric && topLanguages()}</>}
     </div>
   </>)
+```
+#Twitter Project
+
+postTweet Function:
+```
+  const postTweet = () => {
+    if(currTweet.length < 1){
+      return
+    }
+    const date = new Date()
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const tweetObj = {
+      tweet:currTweet,
+      date: month+"/"+day+"/"+year,
+      edit:"",
+      comments:[],
+      tempComm:""
+    }
+    setTweets(prevTweets => [...prevTweets,tweetObj])
+    setCurrTweet("")
+    setWordCount(250)
+
+  }
+```
+LoadTweets component:
+
+```
+  const LoadTweets = () => {
+    const removeTweet = (delTweet) => {
+      setTweets(tweets.filter((item)=>item!==delTweet))
+    }
+    const likeTweet = (likedTweet) => {
+      setLikedPosts(prevList => [...prevList,likedTweet])
+    }
+    const unlikeTweet = (unlikedTweet)=>{
+      setLikedPosts(likedPosts.filter((item)=>item!==unlikedTweet))
+    }
+    const editTweet = (tweet) => {
+      setEditingTweets(prevList=>[...prevList,tweet])
+    }
+    const saveChanges = (tweet) => {
+      tweet.tweet=tweet.edit
+      setEditingTweets(editingTweets.filter((item)=>item!==tweet))
+      tweet.edit=""
+    }
+```
+
+```
+    const addComments = (tweet) => {
+      const commInd = tweets.indexOf(tweet)
+      const updatedTweet = {
+        ...tweet, 
+        comments: [...tweet.comments, tweet.tempComm]
+      };
+      const updatedTweets = tweets.map((item, i) => 
+        i === commInd ? updatedTweet : item
+      );
+      setTweets(updatedTweets)
+      tweet.tempComm=""
+      setLoadComments((prevList)=>[...prevList,updatedTweet])
+    }
+    const handleCommentBtn = (tweet) => {
+      if(loadComments.includes(tweet)){
+        setLoadComments(loadComments.filter((item)=>item!==tweet))
+        return
+      }
+      setLoadComments((prevList)=>[...prevList,tweet])
+    }
+```
+
+```
+    return tweets.map((tweetObj)=><div key={tweetObj} style={{marginLeft:20,marginRight:20,maxWidth:500}}>
+    <div style={tweetHeaderStyle}><CgProfile size={35}/><p style={{marginTop:0,marginBottom:0,marginLeft:5,fontSize:12,color:"gray"}}>@username</p></div>
+    
+    {editingTweets.includes(tweetObj) ? <div>
+      <textarea onChange={(e)=>tweetObj.edit=e.target.value} maxLength={250} type="text"  placeholder="" style={{height:60,width:"100%",resize:"none",overflowY:"auto",msOverflowX:"hidden"}}></textarea>
+      <div>
+        <button onClick={()=>saveChanges(tweetObj)} style={saveAndDiscardBtns}>Save</button><button style={saveAndDiscardBtns} onClick={()=>{setEditingTweets(editingTweets.filter((item)=>item!==tweetObj)); tweetObj.edit=""}}>Discard</button></div></div> : 
+        <p style={{marginTop:0,marginLeft:5,maxWidth:500,wordWrap:"break-word"}}>{tweetObj.tweet}</p>}
+
+    <div style={{display:"flex",justifyContent:'space-between'}}>
+      <div style={{marginLeft:2,width:45,display:"flex",justifyContent:"space-between"}}>
+        <FiEdit onMouseEnter={()=>setEditHover((prevList)=>[...prevList,tweetObj])} onMouseLeave={()=>setEditHover(editHover.filter((item)=>item!==tweetObj))} onClick={()=>editTweet(tweetObj)} style={{ cursor: 'pointer',color:(editHover.includes(tweetObj) ? "blue" : "black")}}/> 
+        <FaRegTrashCan onMouseEnter={()=>setDeleteHover((prevList)=>[...prevList,tweetObj])} onMouseLeave={()=>setDeleteHover(deleteHover.filter((item)=>item!==tweetObj))} style={{ cursor: 'pointer',color:(deleteHover.includes(tweetObj) ? "red" : "black")}} onClick={()=>removeTweet(tweetObj)}/></div> 
+      <div style={{marginLeft:5,width:45,display:"flex",justifyContent:"space-between"}}>
+        <FaRegComment onClick={()=>handleCommentBtn(tweetObj)} onMouseEnter={()=>setCommentHover((prevList)=>[...prevList,tweetObj])} onMouseLeave={()=>setCommentHover(commentHover.filter((item)=>item!==tweetObj))} style={{ cursor: 'pointer', color:(commentHover.includes(tweetObj) ? "blue" : "black")}}/> 
+        {likedPosts.includes(tweetObj) ? <FaHeart style={{color:"red",cursor:"pointer"}} onClick={()=>unlikeTweet(tweetObj)}/> :<FaRegHeart onClick={()=>likeTweet(tweetObj)} onMouseEnter={()=>setLikeHover((prevList)=>[...prevList,tweetObj])} onMouseLeave={()=>setLikeHover(likeHover.filter((item)=>item!==tweetObj))} style={{ cursor: 'pointer',color:(likeHover.includes(tweetObj) ? "red" : "black")}}/>}</div> {tweetObj.date}</div>
+      {loadComments.includes(tweetObj) && ( tweetObj.comments.length > 0 ? tweetObj.comments.map((comment)=>
+      <><div style={commentHeaderStyle}><CgProfile size={25}/><p style={{marginTop:0,marginBottom:0,marginLeft:5,fontSize:8,color:"gray"}}>@username</p></div>
+      <p key={comment} style={{marginTop:0,marginLeft:20,maxWidth:500,wordWrap:"break-word"}}>{comment}</p></>) : 
+      <p>No Comments</p>)}
+      {loadComments.includes(tweetObj) && <div><textarea onChange={(e) => tweetObj.tempComm = e.target.value} maxLength={250} type="text"  placeholder="Enter Comment" style={{height:60,width:"100%",resize:"none",overflowY:"auto",msOverflowX:"hidden"}}></textarea><button onClick={()=>addComments(tweetObj)} style={saveAndDiscardBtns} >Comment</button><button style={saveAndDiscardBtns} onClick={()=>setLoadComments(loadComments.filter((item)=>item!==tweetObj))}>Discard</button></div>}
+    </div>)
+```
+
+```
+  return (
+    <div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
+    <div style={tweetContainer}>
+      <div style={{display:"flex",flexDirection:"row",justifyContent:"center",alignItems:"center"}}><textarea style={{height:60,width:"100%",resize:"none",overflowY:"auto",msOverflowX:"hidden",marginLeft:20,borderRadius:7}} maxLength={250} type="text" value={currTweet} placeholder="Enter Text" onChange={(e)=>{setCurrTweet(e.target.value); setWordCount(250-e.target.value.length)}}></textarea><button style={postButtonStyle} onClick={()=>postTweet()}>Post</button></div>
+      <p style={{display:"flex",flexDirection:"row",justifyContent:"right",alignItems:"center",marginTop:0,marginBottom:0,marginRight:80,color:"blue"}}>{wordCount}</p>
+      <LoadTweets/>
+    </div>
+    </div>
+  )
+}
 ```
