@@ -1,4 +1,4 @@
-#Cata Data Project
+# Cata Data Project
 
 Fetch Cats Data:
 Below is the asynchronous fetch cats data function which uses the API (https://api.thecatapi.com/v1/breeds) and retrieves data such as cat weight and lifespan which is
@@ -79,7 +79,7 @@ the image and data has been loaded otherwise we return a paragraph tag containin
     </>
 ```
 
-#Countries Project
+# Countries Project
 
 Fetch Countries:
 Similar to previous fetch requests here we pull data from the API (https://restcountries.com/v3.1/all) once the data is loaded we set the countriesLoad state to true and store
@@ -220,9 +220,10 @@ Here we return the HTML for the countries page along with the map method calls c
     </div>
   </>)
 ```
-#Twitter Project
+# Twitter Project
 
 postTweet Function:
+First we ensure that the currTweet(User input) is greater than 0 otherwise we dont add the tweet to our state containing all tweets and this is done to prevent empty tweets. We also create a tweet object (tweetObj) which will contain the current date, currTweet, an empty array of comments, and tempComm which is used to store the value of a comment being written. Lastly, we add the tweet object to our state containing all tweets, we reset the word count to 250 and we set currTweet state to an empty string to reset the user input box.
 ```
   const postTweet = () => {
     if(currTweet.length < 1){
@@ -246,7 +247,7 @@ postTweet Function:
   }
 ```
 LoadTweets component:
-
+In the LoadTweets component we have helper functions such as removeTweet which filters out and removes a tweet from the tweets state, we have likeTweet which adds a tweet to the likedPosts state updating it and unlikeTweet which does the same as removeTweet but with the likedPosts state. Theres also editTweet which adds the tweet to the editingTweets state which will change the html structure to make a text area appear to update a tweet. Lastly we have saveChanges which is used to update the text within the tweet with the new value, then removes the tweet from the editingTweets state and resets the tweet objects edit member in the case of future edits.
 ```
   const LoadTweets = () => {
     const removeTweet = (delTweet) => {
@@ -267,7 +268,8 @@ LoadTweets component:
       tweet.edit=""
     }
 ```
-
+Comments:
+Here we create a new tweet object with an updated comments array containing the new comment then using the map method we iterate through tweets and replace the corresponding tweet with its updated version and we then set the tweets state to the updated list of tweets and reset tempComm member in tweet for future comments. Finally we have the handleCommentBtn function and this takes into account whether or not the tweet is in the loadComments state or not and if it is then it removes it so no comments are shown and otherwise it adds it to the state that way comments are shown. In other words if the comment button is already pressed and comments are visible then by pressing it again it would hide comments.
 ```
     const addComments = (tweet) => {
       const commInd = tweets.indexOf(tweet)
@@ -290,7 +292,7 @@ LoadTweets component:
       setLoadComments((prevList)=>[...prevList,tweet])
     }
 ```
-
+Here is where we map each tweet object to its corresponding html structure at the top we have the tweet header which contains the profile pic with the username next to it. Below that we have the conditional which determines whether the actual tweet text is shown or a text area to edit the tweet is shown which depends on if the edit tweet button is pressed. When the edit button is pressed two more buttons appear the save button which calls the saveChanges function and discard button which removes the tweet object from the editingTweets state showing the original tweet text again. We also have onMouseEnter and onMouseLeave for each icon(edit,delete,comment,like) so they highlight when the mouse is over them and unhighlight when the mouse is no longer on them. The delete icon when pressed calls removeTweet, the like icon is replaced with a filled in heart when pressed and adds the tweet object to the likedPosts state and when pressed again its replaced with the outline of a heart and the tweet object is removed from the likedPosts state.
 ```
     return tweets.map((tweetObj)=><div key={tweetObj} style={{marginLeft:20,marginRight:20,maxWidth:500}}>
     <div style={tweetHeaderStyle}><CgProfile size={35}/><p style={{marginTop:0,marginBottom:0,marginLeft:5,fontSize:12,color:"gray"}}>@username</p></div>
@@ -315,7 +317,7 @@ LoadTweets component:
       {loadComments.includes(tweetObj) && <div><textarea onChange={(e) => tweetObj.tempComm = e.target.value} maxLength={250} type="text"  placeholder="Enter Comment" style={{height:60,width:"100%",resize:"none",overflowY:"auto",msOverflowX:"hidden"}}></textarea><button onClick={()=>addComments(tweetObj)} style={saveAndDiscardBtns} >Comment</button><button style={saveAndDiscardBtns} onClick={()=>setLoadComments(loadComments.filter((item)=>item!==tweetObj))}>Discard</button></div>}
     </div>)
 ```
-
+At the end of the Twitter component we return the html containing the LoadTweets component and above it we have the textarea for user input onChange we update the currTweet state and there's the post button next to it which onClickc calls our postTweet function.
 ```
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
