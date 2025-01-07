@@ -1,4 +1,5 @@
 # Cata Data Project
+<img width="959" alt="cataData" src="https://github.com/user-attachments/assets/eb9e5957-b128-418d-8f96-df6ac67cc5bc" />
 
 Fetch Cats Data:
 Below is the asynchronous fetch cats data function which uses the API (https://api.thecatapi.com/v1/breeds) and retrieves data such as cat weight and lifespan which is
@@ -80,6 +81,7 @@ the image and data has been loaded otherwise we return a paragraph tag containin
 ```
 
 # Countries Project
+<img width="959" alt="countries1" src="https://github.com/user-attachments/assets/fe1daed1-57e8-443a-b004-aa97096c0a06" />
 
 Fetch Countries:
 Similar to previous fetch requests here we pull data from the API (https://restcountries.com/v3.1/all) once the data is loaded we set the countriesLoad state to true and store
@@ -104,6 +106,9 @@ the data about all countries.
 ```
 
 Handling User Input(Search Bar):
+<img width="946" alt="countries2" src="https://github.com/user-attachments/assets/46922b1a-9685-474a-a6ba-2879c43e0b5a" />
+<img width="944" alt="countries3" src="https://github.com/user-attachments/assets/8595fd63-e6c0-4447-a86f-d8ee608b2b8f" />
+
 If the value in the search box is empty then we just set the countries state to all of the data from the API call. The check languages function takes in the languages of a country along with the value the user inputted into the search bar and returns whether or not what is inputted into the search bar matches with any of the countries languages. This function is used when filtering countries since the search bar allows searching for countries based on languages, capital, and name. So for the filteredCountries variable we use the checkLanguages function along with if the value inputted matches the capital or name of the country to decide if the country should be filtered or not. 
 ```
   const handleUserInput = (e) => {
@@ -142,6 +147,8 @@ These functions are used to retrieve the currencies and languages stored in ever
 ```
 
 Top Populated Countries Function:
+<img width="806" alt="countries4" src="https://github.com/user-attachments/assets/2c438033-7349-4384-ba5d-0b7a0a1963c7" />
+
 First we create an object containing the world population and we then sort all the filtered countries using the popCompFunc enabling us to sort based of the population element of each country object then we reverse the sorted list so that the highest populated countries are at the start. We then return the top 10 populated countries of the filtered countries within a div tag containing the population number of the country within a paragraph tag and a bar whose size depends on the population size of the country.
 ```
   function popCompFunc(a,b){
@@ -166,6 +173,8 @@ First we create an object containing the world population and we then sort all t
 ```
 
 topLanguages Function:
+<img width="707" alt="countries5" src="https://github.com/user-attachments/assets/7db1100e-b283-45f8-b240-2160dcd46692" />
+
 In this function we first create the languageMap which is used as we iterate through the filteredCountries to keep track of the number of countries that speak each language (The keys are the language name and the value is number of countries that speak that language). Then we create a list of tuples which whos first value is the number of countries that speak the language and the second value is the name of the language. This is to make sorting easier since we can sort this list based of that first value. We then reverse and grab the top 10 countries if there are 10 otherwise we just use the whole list and we create the html structure for each language along with the bar representing how frequent the language is used.
 ```
   function tupleCmpFn(a,b){
@@ -220,7 +229,8 @@ Here we return the HTML for the countries page along with the map method calls c
     </div>
   </>)
 ```
-# Twitter Project
+# Twitter Project(Rabbit)
+<img width="943" alt="rabbit" src="https://github.com/user-attachments/assets/6fb99ec0-3a8c-4791-a0a5-7d3ee366e7f6" />
 
 postTweet Function:
 First we ensure that the currTweet(User input) is greater than 0 otherwise we dont add the tweet to our state containing all tweets and this is done to prevent empty tweets. We also create a tweet object (tweetObj) which will contain the current date, currTweet, an empty array of comments, and tempComm which is used to store the value of a comment being written. Lastly, we add the tweet object to our state containing all tweets, we reset the word count to 250 and we set currTweet state to an empty string to reset the user input box.
